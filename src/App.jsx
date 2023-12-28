@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import Navbar from './Navbar';
+import Map from './Map'
+import 'leaflet/dist/leaflet.css';
+
 
 function App() {
   const [value, setValue] = useState('');
@@ -8,6 +11,8 @@ function App() {
   const [isp, setIsp] = useState('');
   const [time, setTime] = useState('');
   const [loc, setLoc] = useState('');
+  const [lat, setLat] = useState('');
+  const [lon, setLon] = useState('');
 
   const change = (e) => {
     setValue(e.target.value);
@@ -23,6 +28,8 @@ function App() {
         setIsp(data.isp);
         setTime(data.location.timezone);
         setLoc(data.location.region + ', ' + data.location.city);
+        setLat(data.location.lat)
+        setLon(data.location.lng)
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -33,14 +40,17 @@ function App() {
 
   return (
     <main className='flex flex-col items-center'>
-      <Navbar 
+      <section className='absolute'>
+        <Navbar className="absolute"
         value={value} 
         onChange={change} 
         ip={ip}
         isp={isp}
         time={time}
         loc={loc}
-      />
+        />
+        <Map lat={lat} lon={lon} className="relative"/>
+      </section>
     </main>
   );
 }
